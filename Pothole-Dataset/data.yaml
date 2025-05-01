@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 12
+`
+
+roboflow:
+  workspace: jason-workspace-krcmo
+  project: pothole-ewv2r
+  version: 4
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/jason-workspace-krcmo/pothole-ewv2r/dataset/4
