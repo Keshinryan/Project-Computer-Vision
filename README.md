@@ -14,11 +14,11 @@
 - [Next Steps](#next-steps)
 
 ## Project Overview
-A computer vision system to detect potholes in real-time using YOLO for road maintenance. 
+A computer vision system to detect potholes and other road damage in real-time using YOLO for road maintenance. 
 
 **Key Features Target**:
 - Real-time detection (30+ FPS)
-- Accuracy >70% on uneven roads
+- Accuracy > 70% on uneven roads
 - Web compatibility
 
 ## 25% Progress Summary
@@ -26,7 +26,7 @@ A computer vision system to detect potholes in real-time using YOLO for road mai
 
 | Task                | Status | Details                          |
 |---------------------|--------|----------------------------------|
-| Dataset Collection  | ✅     | 8000+ images from https://universe.roboflow.com/jason-workspace-krcmo/pothole-ewv2r/dataset/4         |
+| Dataset Collection  | ✅     | 8000+ images from [click here](https://universe.roboflow.com/jason-workspace-krcmo/pothole-ewv2r/dataset/4)        |
 | Annotation          | ✅     | 8000+ images labeled (YOLOv8 PyTorch TXT)  |
 | Baseline Model      | ✅     | YOLOv8    |
 
@@ -35,7 +35,7 @@ A computer vision system to detect potholes in real-time using YOLO for road mai
 ## Data Preparation
 ### Dataset Source
 ```Roboflow```
-https://universe.roboflow.com/jason-workspace-krcmo/pothole-ewv2r/dataset/4
+[click here](https://universe.roboflow.com/jason-workspace-krcmo/pothole-ewv2r/dataset/4)
 ### Dataset Structure
     Pothole-Dataset/
     ├── test/         # Raw road images
@@ -57,6 +57,9 @@ https://universe.roboflow.com/jason-workspace-krcmo/pothole-ewv2r/dataset/4
 | 🎯 **Improved Accuracy** | 5-10% higher mAP than YOLOv5 on small objects like potholes |
 | 📱 **Multiple Sizes** | Nano (for edge devices) to XLarge (for server processing) |
 | 🔧 **Simplified API** | Fewer lines of code for training compared to previous versions |
+
+### Model Train 
+[click here](https://universe.roboflow.com/jason-workspace-krcmo/pothole-ewv2r/model/2)
 
 ## Next Step
 - Data augmentation (mosaic, rotation, ETC)
