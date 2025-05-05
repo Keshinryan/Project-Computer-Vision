@@ -59,8 +59,8 @@ A computer vision system to detect potholes and other road damage in real-time u
 | 🔧 **Simplified API** | Fewer lines of code for training compared to previous versions |
 
 ### Model Train 
-[click here](https://universe.roboflow.com/jason-workspace-krcmo/pothole-ewv2r/model/2)
-
+roboflow [click here](https://universe.roboflow.com/jason-workspace-krcmo/pothole-ewv2r/model/2)
+google colab  [click here](https://colab.research.google.com/drive/13OujGUSG246OVYmOJ3ZZ18A03ws-qOVe?usp=sharing)
 ## Next Step
 - Data augmentation (mosaic, rotation, ETC)
 - Hyperparameter tuning (optimizer, LR)
