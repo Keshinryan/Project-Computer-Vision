@@ -1,6 +1,6 @@
 # Computer Vision Project Progress Report (25%)
 
-**Project Name**: Pendeteksi Jalanan Rusak (Road Damage Detection)  
+**Project Name**: Pendeteksi Kerusakan Jalan (Road Damage Detection)  
 **Student Name**: Jason Patrick  
 **Course/Institution**: Computer Vision/Politeknik Caltex Riau  
 **Date**: 5/1/2025  
