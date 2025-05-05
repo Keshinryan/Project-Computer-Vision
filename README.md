@@ -27,7 +27,7 @@ A computer vision system to detect potholes in real-time using YOLO for road mai
 | Task                | Status | Details                          |
 |---------------------|--------|----------------------------------|
 | Dataset Collection  | ✅     | 8000+ images from https://universe.roboflow.com/jason-workspace-krcmo/pothole-ewv2r/dataset/4         |
-| Annotation          | ⏳     | 8000+ images labeled (VGG format)  |
+| Annotation          | ✅     | 8000+ images labeled (VGG format)  |
 | Baseline Model      | ✅     | YOLOv8    |
 | Preprocessing       | ⏳     | CLAHE + Gamma correction         |
 
