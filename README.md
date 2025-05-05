@@ -60,6 +60,6 @@ https://universe.roboflow.com/jason-workspace-krcmo/pothole-ewv2r/dataset/4
 | 🔧 **Simplified API** | Fewer lines of code for training compared to previous versions |
 
 ## Next Step
-- Data augmentation (mosaic, rotation)
+- Data augmentation (mosaic, rotation, ETC)
 - Hyperparameter tuning (optimizer, LR)
 - Training Model YOLOv8
