@@ -14,11 +14,11 @@
 - [Next Steps](#next-steps)
 
 ## Project Overview
-A computer vision system to detect potholes in real-time using [YOLO/SSD/Faster R-CNN] for [road maintenance/driver assistance]. 
+A computer vision system to detect potholes in real-time using YOLO for road maintenance. 
 
 **Key Features Target**:
 - Real-time detection (30+ FPS)
-- Accuracy >85% on uneven roads
+- Accuracy >70% on uneven roads
 - Web compatibility
 
 ## 25% Progress Summary
@@ -26,9 +26,9 @@ A computer vision system to detect potholes in real-time using [YOLO/SSD/Faster 
 
 | Task                | Status | Details                          |
 |---------------------|--------|----------------------------------|
-| Dataset Collection  | ✅     | 500 images from [source]         |
-| Annotation          | ⏳     | 300 images labeled (VGG format)  |
-| Baseline Model      | ✅     | YOLOv5-nano tested (62% mAP)     |
+| Dataset Collection  | ✅     | 8000+ images from https://universe.roboflow.com/jason-workspace-krcmo/pothole-ewv2r/dataset/4         |
+| Annotation          | ⏳     | 8000+ images labeled (VGG format)  |
+| Baseline Model      | ✅     | YOLOv8    |
 | Preprocessing       | ⏳     | CLAHE + Gamma correction         |
 
 ## Data Pipeline
