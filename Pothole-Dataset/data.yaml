@@ -3,7 +3,7 @@ val: ../valid/images
 test: ../test/images
 
 nc: 12
-`
+names: ['Hump', 'crack', 'curb', 'damage', 'dash', 'distressed', 'grate', 'manhole', 'marking', 'pothole', 'utility', 'vehicle']
 
 roboflow:
   workspace: jason-workspace-krcmo
