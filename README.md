@@ -62,4 +62,4 @@ https://universe.roboflow.com/jason-workspace-krcmo/pothole-ewv2r/dataset/4
 ## Next Step
 - Data augmentation (mosaic, rotation)
 - Hyperparameter tuning (optimizer, LR)
-- Training Model YOLOv8
+- Training Model YOLOv8vi
