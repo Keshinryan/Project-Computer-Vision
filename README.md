@@ -17,7 +17,6 @@
 A computer vision system to detect potholes and other road damage in real-time using YOLO for road maintenance. 
 
 **Key Features Target**:
-- Real-time detection (30+ FPS)
 - Accuracy > 70% on uneven roads
 - Web compatibility
 
