@@ -1,4 +1,4 @@
-# Computer Vision Project Progress Report (25%)
+# Computer Vision Project Progress Report
 
 **Project Name**: Pendeteksi Kerusakan Jalan (Road Damage Detection)  
 **Student Name**: Jason Patrick  
@@ -25,8 +25,8 @@ A computer vision system to detect potholes and other road damage in real-time u
 
 | Task                | Status | Details                          |
 |---------------------|--------|----------------------------------|
-| Dataset Collection  | ✅     | 1000+ images from [click here](https://universe.roboflow.com/jason-workspace-krcmo/pothole-ewv2r/dataset/4)        |
-| Annotation          | ✅     | 1000+ images labeled (YOLOv8 PyTorch TXT)  |
+| Dataset Collection  | ✅     | 8000+ images from [click here](https://universe.roboflow.com/jason-workspace-krcmo/pothole-ewv2r/dataset/4)        |
+| Annotation          | ✅     | 8000+ images labeled (YOLOv8 PyTorch TXT)  |
 | Baseline Model      | ✅     | YOLOv8    |
 
 ## Data Pipeline
