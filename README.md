@@ -4,7 +4,6 @@
 **Student Name**: Jason Patrick  
 **Course/Institution**: Computer Vision/Politeknik Caltex Riau  
 **Date**: 5/1/2025  
-**Progress**: 25% Complete  
 
 ## Table of Contents
 - [Project Description](#project-description)
