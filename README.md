@@ -46,7 +46,7 @@ A computer vision system to detect potholes and other road damage in real-time u
     train: ../train/images
     val: ../valid/images
     test: ../test/images
-    names: ['crack','manhole','pothole']
+    names: ['crack','pothole','distressed']
 ## Model Experiment
 ### Framework Model 
 ```YOLOv8``` **Optimal for pothole detection** due to:
