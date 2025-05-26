@@ -33,7 +33,8 @@ A computer vision system to detect potholes and other road damage in real-time u
 ## Data Preparation
 ### Dataset Source
 ```Roboflow```
-[click here](https://universe.roboflow.com/jason-workspace-krcmo/pothole-ewv2r/dataset/4)
+[click here](https://universe.roboflow.com/jerry-cooper-tlzkx/pothole_detection-hfnqo)
+[click here](https://universe.roboflow.com/vaibhavraje-gaikwad/pothole-detection-lzbpk)
 ### Dataset Structure
     Pothole-Dataset/
     ├── test/         # Raw road images
@@ -57,8 +58,7 @@ A computer vision system to detect potholes and other road damage in real-time u
 | 🔧 **Simplified API** | Fewer lines of code for training compared to previous versions |
 
 ### Model Train 
-#### roboflow
-[click here](https://universe.roboflow.com/jason-workspace-krcmo/pothole-ewv2r/model/2)
+
 #### google colab
 [click here](https://colab.research.google.com/drive/13OujGUSG246OVYmOJ3ZZ18A03ws-qOVe?usp=sharing)
 ## Next Step
