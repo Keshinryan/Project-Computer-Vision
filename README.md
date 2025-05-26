@@ -7,7 +7,7 @@
 
 ## Table of Contents
 - [Project Description](#project-description)
-- [25% Progress Summary](#25-progress-summary)
+- [Progress Summary](#progress-summary)
 - [Data Pipeline](#data-pipeline)
 - [Model Experiments](#model-experiments)
 - [Next Steps](#next-steps)
@@ -19,7 +19,7 @@ A computer vision system to detect potholes and other road damage in real-time u
 - Accuracy > 70% on detecting pothole
 - Web compatibility
 
-## 25% Progress Summary
+## Progress Summary
 ✅ **Completed** | ⏳ **In Progress** | ❌ **Pending**
 
 | Task                | Status | Details                          |
