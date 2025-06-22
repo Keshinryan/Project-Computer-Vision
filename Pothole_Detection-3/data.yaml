@@ -1,0 +1,14 @@
+names:
+- crack
+- patch
+- pothole
+nc: 3
+roboflow:
+  license: CC BY 4.0
+  project: pothole_detection-hfnqo-xmx8j
+  url: https://universe.roboflow.com/jason-workspace-krcmo/pothole_detection-hfnqo-xmx8j/dataset/3
+  version: 3
+  workspace: jason-workspace-krcmo
+test: ../test/images
+train: ../train/images
+val: ../valid/images
