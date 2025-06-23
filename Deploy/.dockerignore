@@ -1,6 +1,8 @@
-app/results
-app/uploads
-app/model/*.pt
+*.log
 __pycache__/
-*.mp4
-*.jpg
+*.pyc
+*.ipynb
+
+# Don't ignore app/model folder
+!app/model/
+!app/model/best.pt

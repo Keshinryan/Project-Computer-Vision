@@ -34,16 +34,28 @@ class URLRequest(BaseModel):
     url: str
 
 def predict_and_return_path(source_path: str) -> str:
-    # Clear old results before prediction
+    # Clear old results
     for f in Path(RESULT_DIR).glob("*"):
         f.unlink()
-    # Run prediction, save results to RESULT_DIR
-    model.predict(source=source_path, save=True, save_dir=RESULT_DIR, conf=0.25)
-    # Return first result file path (jpg or mp4)
-    results = list(Path(RESULT_DIR).rglob("*.jpg")) + list(Path(RESULT_DIR).rglob("*.mp4"))
-    if not results:
+
+    # Run prediction
+    results = model.predict(source=source_path, save=True, conf=0.25)
+
+    # Ambil folder hasil prediksi (defaultnya: runs/detect/exp)
+    result_dir = Path(results[0].save_dir)
+
+    # Ambil file gambar/video hasil prediksi
+    predicted_files = list(result_dir.rglob("*.jpg")) + list(result_dir.rglob("*.mp4"))
+    if not predicted_files:
         raise HTTPException(status_code=500, detail="No prediction result found.")
-    return str(results[0])
+
+    # Salin hasil pertama ke app/results untuk dikirim ke client
+    result_path = predicted_files[0]
+    final_output_path = Path(RESULT_DIR) / result_path.name
+    shutil.copy(result_path, final_output_path)
+
+    return str(final_output_path)
+
 
 @app.post("/predict/image")
 async def predict_image(file: UploadFile = File(...)):
