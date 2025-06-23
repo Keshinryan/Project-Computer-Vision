@@ -130,6 +130,11 @@ curl -X POST "http://localhost:8000/predict/image/url" \
   -d '{"url": "https://example.com/image.jpg"}' --output result.jpg
 ```
 
+### 🎥 Detection Demo
+Check out the demo video below to see the object detection system in action. The video showcases real-time detection on sample input, highlighting the model's accuracy and responsiveness.
+
+<video src="demo.mp4" controls autoplay muted loop width="700" style="border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); margin-top: 10px;"></video>
+
 ## 🔜 Next Steps
 
 - [x] Data collection and annotation
@@ -144,6 +149,7 @@ curl -X POST "http://localhost:8000/predict/image/url" \
 - 🔗 Dataset: [Roboflow](https://universe.roboflow.com/jason-workspace-krcmo/pothole-ewv2r/dataset/4)  
 
 ---
+
 
 ## 🙋‍♂️ Author
 
