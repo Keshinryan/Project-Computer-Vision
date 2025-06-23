@@ -34,28 +34,31 @@ class URLRequest(BaseModel):
     url: str
 
 def predict_and_return_path(source_path: str) -> str:
-    # Clear old results
+    print(f"[INFO] Predicting file: {source_path}")
+    
+    # Clear previous results
     for f in Path(RESULT_DIR).glob("*"):
         f.unlink()
 
-    # Run prediction
+    # Run YOLO prediction
     results = model.predict(source=source_path, save=True, conf=0.25)
+    
+    if not results:
+        raise HTTPException(status_code=500, detail="YOLO returned no result")
 
-    # Ambil folder hasil prediksi (defaultnya: runs/detect/exp)
+    print(f"[INFO] Result save_dir: {results[0].save_dir}")
+
     result_dir = Path(results[0].save_dir)
-
-    # Ambil file gambar/video hasil prediksi
     predicted_files = list(result_dir.rglob("*.jpg")) + list(result_dir.rglob("*.mp4"))
+
     if not predicted_files:
         raise HTTPException(status_code=500, detail="No prediction result found.")
 
-    # Salin hasil pertama ke app/results untuk dikirim ke client
     result_path = predicted_files[0]
     final_output_path = Path(RESULT_DIR) / result_path.name
     shutil.copy(result_path, final_output_path)
 
     return str(final_output_path)
-
 
 @app.post("/predict/image")
 async def predict_image(file: UploadFile = File(...)):
