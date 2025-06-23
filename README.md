@@ -163,7 +163,7 @@ Use `curl` or Postman:
 ```bash
 curl -X POST "http://localhost:8000/predict/image/url" \
   -H "Content-Type: application/json" \
-  -d '{"url": "https://example.com/image.jpg"}' --output result.jpg
+  -d '{"url": "https://example.com/image.jpg"}' --output url to access the result.png
 ```
 
 ##  Detection Demo
