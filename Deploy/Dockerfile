@@ -13,16 +13,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ln -s /usr/local/bin/pip /usr/bin/pip && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
-# Copy requirements.txt
+# Copy and install PyTorch separately
+COPY torch_requirements.txt .
+RUN pip install --no-cache-dir -r torch_requirements.txt
+
+# Then copy and install other requirements
 COPY requirements.txt .
-
-# Uninstall existing torch packages (if any) just to be safe
-RUN pip uninstall -y torch torchvision torchaudio || true
-
-# Install PyTorch 2.0.1 with CUDA 11.7 explicitly
-RUN pip install torch==2.0.1+cu117 torchvision==0.15.2+cu117 torchaudio==2.0.2 --extra-index-url https://download.pytorch.org/whl/cu117
-
-# Install other Python dependencies from requirements.txt (make sure torch is NOT listed there)
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy your application code

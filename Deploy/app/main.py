@@ -100,7 +100,7 @@ async def predict_video(file: UploadFile = File(...)):
         if not is_valid_video(file_path):
             raise HTTPException(status_code=400, detail="Uploaded video file is not valid or corrupted.")
         result = predict_and_return_path(file_path)
-        return FileResponse(result)
+        return FileResponse(result, media_type="video/mp4")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -111,6 +111,6 @@ async def predict_video_url(request: URLRequest):
         if not is_valid_video(path):
             raise HTTPException(status_code=400, detail="Downloaded video is invalid or unreadable.")
         result = predict_and_return_path(path)
-        return FileResponse(result)
+        return FileResponse(result, media_type="video/mp4")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

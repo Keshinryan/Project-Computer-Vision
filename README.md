@@ -82,6 +82,7 @@ dataset/
 - PyTorch ≥ 2.0.1+cu117
 - Ultralytics
 - roboflow
+- using GPU Nvidia GTX with 11.7
 
 ### 🔧 Setup
 ```bash
@@ -118,9 +119,13 @@ The model deployed with This FastAPI application allows you to upload or link im
    ```bash
    docker build -t yolov8-fastapi:latest .
    ```
-4. Run the container:
+4. Run the container (for development):
    ```bash
    docker run --gpus all -it --rm -p 8000:8000 yolov8-fastapi
+   ```
+5.Run the container (for deployment):
+   ```bash
+   docker run --gpus all -d --name yolov8-app -p 8000:8000 yolov8-fastapi
    ```
 
 #### Example Test
