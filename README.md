@@ -137,7 +137,9 @@ curl -X POST "http://localhost:8000/predict/image/url" \
 ```
 
 ## 🎥 Detection Demo
-
+### 🖼️ Image Prediction Demo
+![Preview](demo.jpeg)
+### 🎞️Video Prediction Demo
 ![Video Frame](demo.gif)
 
 ## 🔜 Next Steps

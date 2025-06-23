@@ -5,5 +5,6 @@ python-multipart
 opencv-python-headless
 Pillow
 numpy==1.24.4
+yt-dlp
 ultralytics==8.0.155  # Pin YOLOv8 compatible with torch 1.12 for local
 #ultralytics for deployment in hf
