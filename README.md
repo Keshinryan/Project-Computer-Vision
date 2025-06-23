@@ -32,10 +32,6 @@ This project aims to build a real-time road damage detection system for:
 | Optimize hyperparameter | ✅ | optimize the pixel size, and get more data, also add more epoch to be 100 | 
 | Deploy Model | ✅ | already deploy with fastAPI and html frontend page| 
 
-###  Goals
-- Accuracy > 70% on detecting pothole
-- Web compatibility
-
 ##  Dataset
 
 📦 **Source**: Combined from multiple public datasets on [Roboflow Universe](https://universe.roboflow.com)  
