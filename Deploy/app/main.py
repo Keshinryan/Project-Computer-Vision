@@ -1,14 +1,15 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException
-from fastapi.responses import FileResponse
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from ultralytics import YOLO
-from pathlib import Path
+from fastapi import FastAPI, UploadFile, File, HTTPException #type: ignore
+from fastapi.responses import FileResponse #type: ignore
+from fastapi.middleware.cors import CORSMiddleware #type: ignore
+from pydantic import BaseModel #type: ignore
+from ultralytics import YOLO #type: ignore
+from pathlib import Path #type: ignore
 import os
 import uuid
 import shutil
+import cv2 #type: ignore
 
-from app.utils import download_file  # make sure this util is implemented correctly
+from app.utils import download_file
 
 UPLOAD_DIR = "app/uploads"
 RESULT_DIR = "app/results"
@@ -27,32 +28,36 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-# Load model once on startup
 model = YOLO(MODEL_PATH)
 
 class URLRequest(BaseModel):
     url: str
 
+def is_valid_video(filepath: str) -> bool:
+    cap = cv2.VideoCapture(filepath)
+    valid = cap.isOpened()
+    cap.release()
+    return valid
+
 def predict_and_return_path(source_path: str) -> str:
     print(f"[INFO] Predicting file: {source_path}")
-    
-    # Clear previous results
+
+    # Clear old results
     for f in Path(RESULT_DIR).glob("*"):
         f.unlink()
 
-    # Run YOLO prediction
     results = model.predict(source=source_path, save=True, conf=0.25)
-    
-    if not results:
-        raise HTTPException(status_code=500, detail="YOLO returned no result")
 
-    print(f"[INFO] Result save_dir: {results[0].save_dir}")
+    if not results or not hasattr(results[0], "save_dir"):
+        raise HTTPException(status_code=500, detail="Prediction failed or no result directory created.")
 
     result_dir = Path(results[0].save_dir)
+    print(f"[INFO] Result saved at: {result_dir}")
+
     predicted_files = list(result_dir.rglob("*.jpg")) + list(result_dir.rglob("*.mp4"))
 
     if not predicted_files:
-        raise HTTPException(status_code=500, detail="No prediction result found.")
+        raise HTTPException(status_code=500, detail="No prediction output found (jpg/mp4).")
 
     result_path = predicted_files[0]
     final_output_path = Path(RESULT_DIR) / result_path.name
@@ -92,6 +97,8 @@ async def predict_video(file: UploadFile = File(...)):
         file_path = os.path.join(UPLOAD_DIR, f"{uuid.uuid4()}.{ext}")
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
+        if not is_valid_video(file_path):
+            raise HTTPException(status_code=400, detail="Uploaded video file is not valid or corrupted.")
         result = predict_and_return_path(file_path)
         return FileResponse(result)
     except Exception as e:
@@ -101,6 +108,8 @@ async def predict_video(file: UploadFile = File(...)):
 async def predict_video_url(request: URLRequest):
     try:
         path = download_file(request.url, is_video=True)
+        if not is_valid_video(path):
+            raise HTTPException(status_code=400, detail="Downloaded video is invalid or unreadable.")
         result = predict_and_return_path(path)
         return FileResponse(result)
     except Exception as e:
