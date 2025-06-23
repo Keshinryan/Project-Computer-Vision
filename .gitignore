@@ -1,8 +1,7 @@
 # Ignore results, uploads, model weights, cache, pycache
 app/results/
 app/uploads/
-app/model/*.pt
-*.mp4
+mp4
 *.jpg
 __pycache__/
 
