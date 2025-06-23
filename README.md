@@ -116,11 +116,11 @@ The model deployed with This FastAPI application allows you to upload or link im
 2. Put your `best.pt` model file in the root folder
 3. Build the Docker image:
    ```bash
-   docker build -t road-damage-detector .
+   docker build -t yolov8-fastapi:latest .
    ```
 4. Run the container:
    ```bash
-   docker run -p 8000:8000 road-damage-detector
+   docker run --gpus all -it --rm -p 8000:8000 yolov8-fastapi
    ```
 
 #### Example Test
