@@ -26,7 +26,7 @@ This project aims to build a real-time road damage detection system for:
 | Baseline Model      | ✅     | YOLOv8    |
 | Evaluate Model      | ✅     | mAP50:    mAP50-95:  |
 | Optimize hyperparameter | ✅ | optimize the pixel size, and get more data, also add more epoch to be 100 | 
-| Deploy Model | ❌ | Still hyperparameter model| 
+| Deploy Model | ❌ | Still try to rebuilt the docker| 
 
 ### 🎯 Goals
 - Accuracy > 70% on detecting pothole
@@ -68,9 +68,10 @@ dataset/
 
 | Class      | mAP@50 | mAP@50–95 |
 |------------|--------|-----------|
-| Crack      | 0.378  | 0.149     |
-| Distressed | 0.178  | 0.072     |
-| Pothole    | 0.755  | 0.465     |
+| All        | 0.635  | 0.382     |
+| Crack      | 0.452  | 0.207     |
+| Patch      | 0.709  | 0.477     |
+| Pothole    | 0.744  | 0.463     |
 
 ---
 
