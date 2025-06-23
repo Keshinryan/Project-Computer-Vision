@@ -3,7 +3,7 @@ import shutil
 import uuid
 import requests
 import subprocess
-from fastapi import HTTPException
+from fastapi import HTTPException #type: ignore
 from urllib.parse import urlparse
 
 UPLOAD_DIR = "app/uploads"

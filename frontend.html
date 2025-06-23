@@ -28,19 +28,20 @@
       border-radius: 12px;
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
       padding: 30px;
-      max-width: 900px;
+      width: 60%;
       margin: 30px auto;
       text-align: center;
     }
 
     .toggle-buttons {
       display: flex;
-      justify-content: center;
-      gap: 20px;
+      justify-content: space-between;
       margin-bottom: 30px;
+      gap: 20px;
     }
 
     .toggle-buttons button {
+      flex: 1;
       padding: 12px 24px;
       border: none;
       border-radius: 8px;
@@ -48,7 +49,6 @@
       font-weight: bold;
       font-size: 18px;
       color: white;
-      width: 40%;
     }
 
     .upload-btn {
@@ -75,17 +75,22 @@
       font-size: 16px;
     }
 
-    input[type="file"],
-    input[type="url"] {
-      width: 40vw;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 16px;
+    .input-wrapper {
+      position: relative;
       margin-top: 8px;
     }
 
-    input[type="file"]::file-selector-button {
+    .input-wrapper input[type="file"],
+    .input-wrapper input[type="url"] {
+      width: 100%;
+      padding: 12px 40px 12px 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    .input-wrapper input[type="file"]::file-selector-button {
       background-color: #16a085;
       border: none;
       padding: 10px 16px;
@@ -96,8 +101,41 @@
       cursor: pointer;
     }
 
-    input[type="file"]::file-selector-button:hover {
+    .input-wrapper input[type="file"]::file-selector-button:hover {
       background-color: #138d75;
+    }
+
+    .clear-btn,
+    .predict-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 8px 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      color: white;
+      font-size: 14px;
+    }
+
+    .clear-btn {
+      right: 8px;
+      background-color: #e74c3c;
+      display: none;
+    }
+
+    .predict-btn {
+      right: 8px;
+      background-color: #3498db;
+    }
+
+    .clear-btn:hover {
+      background-color: #c0392b;
+    }
+
+    .predict-btn:hover {
+      background-color: #2c80b4;
     }
 
     .hidden {
@@ -108,17 +146,39 @@
       display: none;
       text-align: center;
       margin: 0 auto 30px;
-      max-width: 900px;
+      width: 60%;
       padding: 20px;
       background: white;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
-    .result img, .result video {
+    .result img,
+    .result video {
       max-width: 100%;
       border-radius: 10px;
       margin-top: 20px;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      margin: 20px auto;
+    }
+
+    .spinner {
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #3498db;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     footer {
@@ -130,10 +190,17 @@
     }
 
     @media screen and (max-width: 768px) {
-      .toggle-buttons button,
-      input[type="file"],
-      input[type="url"] {
+      .card, .result {
         width: 90%;
+      }
+
+      .toggle-buttons {
+        flex-direction: column;
+      }
+
+      .toggle-buttons button {
+        width: 100%;
+        margin-bottom: 10px;
       }
     }
   </style>
@@ -144,38 +211,49 @@
   </div>
 
   <div class="card">
-    <!-- Toggle Buttons -->
     <div class="toggle-buttons">
       <button id="btnUpload" class="upload-btn active">📁 Upload</button>
       <button id="btnURL" class="url-btn">🌐 From URL</button>
     </div>
 
-    <!-- Dynamic Input Section -->
     <div class="input-section">
-      <!-- Upload Inputs -->
       <div id="uploadSection">
         <label for="imageInput">Upload Image</label>
-        <input type="file" id="imageInput" accept="image/*" />
+        <div class="input-wrapper">
+          <input type="file" id="imageInput" accept="image/*" />
+          <button class="clear-btn" id="clearImage" onclick="clearInput('imageInput', 'clearImage')">❌</button>
+        </div>
 
         <label for="videoInput">Upload Video</label>
-        <input type="file" id="videoInput" accept="video/*" />
+        <div class="input-wrapper">
+          <input type="file" id="videoInput" accept="video/*" />
+          <button class="clear-btn" id="clearVideo" onclick="clearInput('videoInput', 'clearVideo')">❌</button>
+        </div>
       </div>
 
-      <!-- URL Inputs -->
       <div id="urlSection" class="hidden">
         <label for="imageURL">Image URL</label>
-        <input type="url" id="imageURL" placeholder="https://example.com/image.jpg" />
+        <div class="input-wrapper">
+          <input type="url" id="imageURL" placeholder="https://example.com/image.jpg" oninput="toggleClear('imageURL', 'clearImageURL')" />
+          <button class="predict-btn" onclick="handleURLDetection('imageURL', '/predict/image/url', 'Image')">Predict</button>
+        </div>
 
-        <label for="videoURL">Video URL</label>
-        <input type="url" id="videoURL" placeholder="https://example.com/video.mp4" />
+        <label for="videoURL" style="margin-top: 20px;">Video URL</label>
+        <div class="input-wrapper">
+          <input type="url" id="videoURL" placeholder="https://example.com/video.mp4" oninput="toggleClear('videoURL', 'clearVideoURL')" />
+          <button class="predict-btn" onclick="handleURLDetection('videoURL', '/predict/video/url', 'Video')">Predict</button>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Results -->
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <p>Please wait, detecting road damage...</p>
+  </div>
+
   <div class="result" id="result"></div>
 
-  <!-- Footer -->
   <footer>
     Developed by Jason Patrick - Politeknik Caltex Riau
   </footer>
@@ -186,6 +264,7 @@
     const uploadSection = document.getElementById("uploadSection");
     const urlSection = document.getElementById("urlSection");
     const resultDiv = document.getElementById("result");
+    const loading = document.getElementById("loading");
 
     btnUpload.addEventListener("click", () => {
       uploadSection.classList.remove("hidden");
@@ -201,6 +280,28 @@
       btnURL.classList.add("active");
     });
 
+    function clearInput(inputId, clearBtnId) {
+      const input = document.getElementById(inputId);
+      input.value = "";
+      document.getElementById(clearBtnId).style.display = "none";
+    }
+
+    function toggleClear(inputId, clearBtnId) {
+      const input = document.getElementById(inputId);
+      const clearBtn = document.getElementById(clearBtnId);
+      clearBtn.style.display = input.value ? "block" : "none";
+    }
+
+    document.getElementById("imageInput").addEventListener("change", () => {
+      document.getElementById("clearImage").style.display = "block";
+      handleFileUpload("imageInput", "/predict/image", "Image");
+    });
+
+    document.getElementById("videoInput").addEventListener("change", () => {
+      document.getElementById("clearVideo").style.display = "block";
+      handleFileUpload("videoInput", "/predict/video", "Video");
+    });
+
     async function handleFileUpload(inputId, endpoint, type) {
       const input = document.getElementById(inputId);
       const file = input.files[0];
@@ -209,14 +310,33 @@
       const formData = new FormData();
       formData.append("file", file);
 
-      const res = await fetch(endpoint, { method: "POST", body: formData });
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
+      try {
+        loading.style.display = "block";
+        resultDiv.style.display = "none";
 
-      resultDiv.innerHTML = `
-        <h3>${type} Detection Result</h3>
-        ${type === "Image" ? `<img src="${url}">` : `<video controls src="${url}"></video>`}`;
-      resultDiv.style.display = "block";
+        const res = await fetch("http://localhost:8000" + endpoint, {
+          method: "POST",
+          body: formData
+        });
+
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(`Upload failed: ${res.status} ${text}`);
+        }
+
+        const result = await res.json();
+        const fullURL = "http://localhost:8000" + result.result_url;
+
+        resultDiv.innerHTML = `
+          <h3>${type} Detection Result</h3>
+          ${type === "Image" ? `<img src="${fullURL}">` : `<video controls src="${fullURL}"></video>`}
+        `;
+        resultDiv.style.display = "block";
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        loading.style.display = "none";
+      }
     }
 
     async function handleURLDetection(inputId, endpoint, type) {
@@ -224,33 +344,32 @@
       const urlInput = input.value.trim();
       if (!urlInput) return;
 
-      const res = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: urlInput })
-      });
+      try {
+        loading.style.display = "block";
+        resultDiv.style.display = "none";
 
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
+        const res = await fetch("http://localhost:8000" + endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url: urlInput })
+        });
 
-      resultDiv.innerHTML = `
-        <h3>${type} URL Detection Result</h3>
-        ${type === "Image" ? `<img src="${url}">` : `<video controls src="${url}"></video>`}`;
-      resultDiv.style.display = "block";
+        const json = await res.json();
+        if (!json.result_url) throw new Error("No result returned");
+
+        const fullUrl = json.result_url.startsWith("http") ? json.result_url : "http://localhost:8000" + json.result_url;
+
+        resultDiv.innerHTML = `
+          <h3>${type} URL Detection Result</h3>
+          ${type === "Image" ? `<img src="${fullUrl}">` : `<video controls src="${fullUrl}"></video>`}
+        `;
+        resultDiv.style.display = "block";
+      } catch (err) {
+        alert("Prediction failed: " + err.message);
+      } finally {
+        loading.style.display = "none";
+      }
     }
-
-    document.getElementById("imageInput").addEventListener("change", () =>
-      handleFileUpload("imageInput", "/predict/image", "Image")
-    );
-    document.getElementById("videoInput").addEventListener("change", () =>
-      handleFileUpload("videoInput", "/predict/video", "Video")
-    );
-    document.getElementById("imageURL").addEventListener("change", () =>
-      handleURLDetection("imageURL", "/predict/image/url", "Image")
-    );
-    document.getElementById("videoURL").addEventListener("change", () =>
-      handleURLDetection("videoURL", "/predict/video/url", "Video")
-    );
   </script>
 </body>
 </html>

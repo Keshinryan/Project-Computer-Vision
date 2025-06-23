@@ -1,15 +1,15 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException  # type: ignore
-from fastapi.responses import FileResponse  # type: ignore
-from fastapi.middleware.cors import CORSMiddleware  # type: ignore
-from pydantic import BaseModel  # type: ignore
-from ultralytics import YOLO  # type: ignore
-from pathlib import Path  # type: ignore
+from fastapi import FastAPI, UploadFile, File, HTTPException #type: ignore
+from fastapi.responses import JSONResponse #type: ignore
+from fastapi.middleware.cors import CORSMiddleware #type: ignore
+from pydantic import BaseModel #type: ignore
+from ultralytics import YOLO #type: ignore
+from pathlib import Path 
 import os
 import uuid
 import shutil
 import subprocess
-import cv2  # type: ignore
-
+import cv2 #type: ignore
+from fastapi.staticfiles import StaticFiles #type: ignore
 from app.utils import download_file
 
 UPLOAD_DIR = "app/uploads"
@@ -21,6 +21,9 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 os.makedirs(RESULT_DIR, exist_ok=True)
 
 app = FastAPI(title="YOLOv8 Road Damage Detection")
+
+# Mount static folder to serve results
+app.mount("/results", StaticFiles(directory=RESULT_DIR, html=False), name="results")
 
 app.add_middleware(
     CORSMiddleware,
@@ -43,62 +46,52 @@ def is_valid_video(filepath: str) -> bool:
 
 def convert_to_mp4(input_path: Path) -> Path:
     output_path = input_path.with_suffix(".mp4")
-
     try:
         subprocess.run([
             "ffmpeg",
-            "-y",                      # Overwrite if exists
-            "-i", str(input_path),     # Input video
-            "-c:v", "libx264",         # Use H.264 codec
-            "-preset", "veryfast",     # Faster encoding
-            "-crf", "23",              # Reasonable quality
-            "-pix_fmt", "yuv420p",     # Compatibility
-            "-movflags", "faststart",  # Make file streamable
+            "-y",
+            "-i", str(input_path),
+            "-c:v", "libx264",
+            "-preset", "veryfast",
+            "-crf", "23",
+            "-pix_fmt", "yuv420p",
+            "-movflags", "faststart",
             str(output_path)
         ], check=True)
     except subprocess.CalledProcessError as e:
         raise RuntimeError(f"FFmpeg conversion failed: {e}")
-
     return output_path
 
-def predict_and_return_path(source_path: str) -> str:
+def predict_and_return_url(source_path: str) -> str:
     print(f"[INFO] Predicting file: {source_path}")
 
-    # Clear old results
-    for f in Path(RESULT_DIR).glob("*"):
-        f.unlink()
+    # Clear results
+    shutil.rmtree("runs/detect", ignore_errors=True)
 
     video_ext = (".mp4", ".avi", ".mov", ".mkv")
     is_video = source_path.lower().endswith(video_ext)
 
-    # Run YOLO prediction
+    unique_id = str(uuid.uuid4())[:8]  # Unique folder name
+    result_path = os.path.join("runs", "detect", unique_id)
+
     results = model.predict(
         source=source_path,
         save=True,
         conf=0.25,
-        stream=is_video
+        stream=is_video,
+        project="runs/detect",
+        name=unique_id,
+        exist_ok=False
     )
 
-    # Let YOLO process if stream=True (video)
     if is_video:
         for _ in results:
             pass
     else:
         results = list(results)
 
-    # Locate YOLO output directory
-    detect_dir = BASE_DIR / "runs" / "detect"
-    if not detect_dir.exists():
-        raise HTTPException(status_code=500, detail=f"No YOLO output directory at {detect_dir}")
+    result_dir = Path(result_path)
 
-    result_dirs = [d for d in detect_dir.iterdir() if d.is_dir()]
-    if not result_dirs:
-        raise HTTPException(status_code=500, detail="No result folder found.")
-
-    result_dir = max(result_dirs, key=os.path.getmtime)
-    print(f"[INFO] Result saved at: {result_dir}")
-
-    # VIDEO: convert .avi to .mp4
     if is_video:
         avi_files = list(result_dir.rglob("*.avi"))
         if not avi_files:
@@ -107,14 +100,15 @@ def predict_and_return_path(source_path: str) -> str:
         final_output_path = Path(RESULT_DIR) / converted.name
         shutil.copy(converted, final_output_path)
     else:
-        # IMAGE: return .jpg result
         img_files = list(result_dir.rglob("*.jpg"))
         if not img_files:
             raise HTTPException(status_code=500, detail="YOLO output not found (jpg)")
         final_output_path = Path(RESULT_DIR) / img_files[0].name
         shutil.copy(img_files[0], final_output_path)
 
-    return str(final_output_path)
+    return f"/results/{final_output_path.name}"
+
+# ---------------------------- ROUTES ----------------------------
 
 @app.post("/predict/image")
 async def predict_image(file: UploadFile = File(...)):
@@ -125,8 +119,8 @@ async def predict_image(file: UploadFile = File(...)):
         file_path = os.path.join(UPLOAD_DIR, f"{uuid.uuid4()}.{ext}")
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
-        result = predict_and_return_path(file_path)
-        return FileResponse(result)
+        result_url = predict_and_return_url(file_path)
+        return JSONResponse(content={"result_url": result_url})
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -134,8 +128,8 @@ async def predict_image(file: UploadFile = File(...)):
 async def predict_image_url(request: URLRequest):
     try:
         path = download_file(request.url, is_video=False)
-        result = predict_and_return_path(path)
-        return FileResponse(result)
+        result_url = predict_and_return_url(path)
+        return JSONResponse(content={"result_url": result_url})
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -150,10 +144,8 @@ async def predict_video(file: UploadFile = File(...)):
             shutil.copyfileobj(file.file, buffer)
         if not is_valid_video(file_path):
             raise HTTPException(status_code=400, detail="Uploaded video file is not valid or corrupted.")
-        result = predict_and_return_path(file_path)
-
-        return FileResponse(result, media_type="video/mp4", filename="prediction.mp4")
-
+        result_url = predict_and_return_url(file_path)
+        return JSONResponse(content={"result_url": result_url})
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -163,8 +155,7 @@ async def predict_video_url(request: URLRequest):
         path = download_file(request.url, is_video=True)
         if not is_valid_video(path):
             raise HTTPException(status_code=400, detail="Downloaded video is invalid or unreadable.")
-        result = predict_and_return_path(path)
-
-        return FileResponse(result, media_type="video/mp4", filename="prediction.mp4")
+        result_url = predict_and_return_url(path)
+        return JSONResponse(content={"result_url": result_url})
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

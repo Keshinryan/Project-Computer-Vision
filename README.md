@@ -6,9 +6,13 @@
 - [Dataset](#dataset)
 - [Model](#model)
 - [Instalation](#instalation)
+- [Deploy](#deploy)
+- [Detection Demo](#detection-demo)
 - [Next Steps](#next-steps)
+- [Author](#author)
+- [Lisence](#lisence)
 
-## 📌 Project Overview
+## Project Overview 
 
 This project aims to build a real-time road damage detection system for:
 - **Potholes**
@@ -26,18 +30,44 @@ This project aims to build a real-time road damage detection system for:
 | Baseline Model      | ✅     | YOLOv8    |
 | Evaluate Model      | ✅     | mAP50:    mAP50-95:  |
 | Optimize hyperparameter | ✅ | optimize the pixel size, and get more data, also add more epoch to be 100 | 
-| Deploy Model | ❌ | Still try to rebuilt the docker| 
+| Deploy Model | ✅ | already deploy with fastAPI and html frontend page| 
 
-### 🎯 Goals
+###  Goals
 - Accuracy > 70% on detecting pothole
 - Web compatibility
 
-## 🗂️ Dataset
+##  Dataset
 
-📦 Source: [Roboflow Datasets](https://universe.roboflow.com/jason-workspace-krcmo/pothole_detection-hfnqo-xmx8j)  
-📐 Format: YOLOv8  
-📊 Size: ~4000+ annotated images
+📦 **Source**: Combined from multiple public datasets on [Roboflow Universe](https://universe.roboflow.com)  
+📐 **Format**: YOLOv8  
+📊 **Total Images**: 4188 annotated images  
+🔗 **Final Dataset (Merged via Roboflow)**: [Pothole_Detection-hfnqo-xmx8j](https://universe.roboflow.com/jason-workspace-krcmo/pothole_detection-hfnqo-xmx8j)
 
+### 📁 Included Datasets:
+| Dataset Name                             | Link                                                                                                             | Total Images |
+|-----------------------------------------|------------------------------------------------------------------------------------------------------------------|--------|
+| Pothole Detection (Jerry Cooper)        | [🔗 Link](https://universe.roboflow.com/jerry-cooper-tlzkx/pothole_detection-hfnqo/)                             | 1043   |
+| Pothole Detection (Vaibhavraje Gaikwad) | [🔗 Link](https://universe.roboflow.com/vaibhavraje-gaikwad/pothole-detection-d0d4l)                             | 48     |
+| My Road Crack Dataset                   | [🔗 Link](https://universe.roboflow.com/newroadcrack/my-road-crack-dataset/)                                     | 385    |
+| Road Crack Detection Combined           | [🔗 Link](https://universe.roboflow.com/road-crack-project/road-crack-detection-combined-dataset)                | 616    |
+| Road Vakow                              | [🔗 Link](https://universe.roboflow.com/road-crack-project/road-vakow/)                                          | 3      |
+| Road Pavement Distress Analysis         | [🔗 Link](https://universe.roboflow.com/saquib-s-zsbio/road-pavement-distress-analysis/)                         | 1137   |
+| Pavement Distresses                     | [🔗 Link](https://universe.roboflow.com/workspace-pavement/pavement-distresses)                                  | 856    |
+
+### 🧩 Dataset Preparation
+
+All datasets were **imported into a single Roboflow workspace**, where the following steps were done using **Roboflow's Merge Datasets** feature:
+
+1. ✅ Unified all label classes and annotation formats to YOLOv8.
+2. ✂️ Removed duplicates and corrupted files.
+3. 🧼 Applied label verification and basic filtering.
+4. 🔄 Split into `train`, `valid`, and `test` subsets.
+5. 📁 Exported as YOLOv8-compatible zipped dataset.
+
+Roboflow’s web interface was used to visually validate labels and generate the final merged dataset, making it ready for model training.
+
+📂 **Directory Preview (after export)**:
+---
 ```bash
 dataset/
 ├── train/
@@ -51,7 +81,7 @@ dataset/
 ---
 
 
-## 🤖 Model
+##  Model
 ### 🖥️ Pipeline
 - **Python**
 
@@ -75,7 +105,7 @@ dataset/
 
 ---
 
-## 🧰 Installation
+##  Installation
 
 ### ⚙️ Requirements
 - Python ≥ 3.10.14
@@ -95,7 +125,7 @@ yolo detect train data=dataset/data.yaml model=yolov8s.pt imgsz=640 epochs=100
 ```
 
 ---
-## 🛠️ Inference Example
+### 🛠️ Inference Example
 
 ```bash
 yolo detect predict model=runs/detect/train/weights/best.pt source=your_video.mp4
@@ -136,13 +166,13 @@ curl -X POST "http://localhost:8000/predict/image/url" \
   -d '{"url": "https://example.com/image.jpg"}' --output result.jpg
 ```
 
-## 🎥 Detection Demo
+##  Detection Demo
 ### 🖼️ Image Prediction Demo
 ![Preview](demo.jpeg)
 ### 🎞️Video Prediction Demo
 ![Video Frame](demo.gif)
 
-## 🔜 Next Steps
+##  Next Steps
 
 ✅ Data collection and annotation  
 ✅ Train YOLOv8 with OBB  
@@ -150,20 +180,14 @@ curl -X POST "http://localhost:8000/predict/image/url" \
 ✅ Optimize with hyperparameter tuning  
 ☐ Deploy to web
 
-## 📎 Links
 
-- 🔗 Dataset: [Roboflow](https://universe.roboflow.com/jason-workspace-krcmo/pothole-ewv2r/dataset/4)  
-
----
-
-
-## 🙋‍♂️ Author
+##  Author
 
 Jason Patrick  
 Computer Vision – Politeknik Caltex Riau
 
 ---
 
-## 📄 License
+##  License
 
 This project is licensed under the MIT License. See `LICENSE` for details.
