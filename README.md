@@ -174,8 +174,7 @@ curl -X POST "http://localhost:8000/predict/image/url" \
 ✅ Train YOLOv8 with OBB  
 ✅ Evaluate mAP  
 ✅ Optimize with hyperparameter tuning  
-☐ Deploy to web
-
+✅ Deploy to web
 
 ##  Author
 
