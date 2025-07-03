@@ -149,7 +149,7 @@ The model deployed with This FastAPI application allows you to upload or link im
    ```bash
    docker run --gpus all -it --rm -p 8000:8000 yolov8-fastapi
    ```
-5.Run the container (for deployment):
+5. Run the container (for deployment):
    ```bash
    docker run --gpus all -d --name yolov8-app -p 8000:8000 yolov8-fastapi
    ```

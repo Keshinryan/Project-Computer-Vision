@@ -20,7 +20,6 @@ __pycache__/
 !app/deploy/**
 
 # If you want to ignore everything inside app except deploy
-app/*
 !app/deploy/
 !app/deploy/**
 
